@@ -1,0 +1,44 @@
+<!-- templates/login.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero is-dark is-fullheight">
+    <div class="hero-body is-dark">
+        <div class="container has-text-centered">
+            <div class="column is-4 is-offset-4">
+                <h3 class="title">Login</h3>
+                <div class="box">
+                        {% with errors = get_flashed_messages() %}
+                        {% if errors %}
+                            <div class="notification is-danger">
+                                {{ errors[0] }}
+                            </div>
+                        {% endif %}
+                        {% endwith %}
+                    <form method="POST" action="/login">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-large" type="email" name="email" placeholder="Your Email" autofocus="">
+                            </div>
+                        </div>
+            
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-large" type="password" name="password" placeholder="Your Password">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Remember me
+                            </label>
+                        </div>
+                        <button class="button is-block is-black is-large is-fullwidth">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
