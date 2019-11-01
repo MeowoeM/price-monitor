@@ -84,7 +84,7 @@ def display_task(task_id):
 def display_tasks(tasks_str):
     tasks_id = list(map(int, tasks_str.split('|')))
 
-    data = []
+    data_list = []
     task_info = []
     for task_id in tasks_id:
         task = Task.query.filter_by(id=task_id).first()
@@ -104,7 +104,7 @@ def display_tasks(tasks_str):
             data = [[0], [0]]
         df = pd.DataFrame({'time': data[0], 'price': data[1]})
 
-        data.append(
+        data_list.append(
             dict(
                 x=df['time'],
                 y=df['price'],
@@ -114,7 +114,7 @@ def display_tasks(tasks_str):
         )
 
     graph = dict(
-        data=data,
+        data=data_list,
         layout=dict(
             xaxis_rangeslider_visible=True
         )
