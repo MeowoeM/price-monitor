@@ -9,7 +9,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SCHEDULER_JOBSTORES = {
-        'default': SQLAlchemyJobStore(url='sqlite://')
+        'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')
     }
 
     SCHEDULER_EXECUTORS = {

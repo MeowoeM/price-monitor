@@ -29,7 +29,7 @@ def signup():
     return render_template('signup.html')
 
 @auth.route('/signup', methods=['POST'])
-def signupPost():
+def signup_post():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
@@ -40,10 +40,10 @@ def signupPost():
         flash('Name or email already exists.')
         return redirect(url_for('auth.signup'))
 
-    newUser = User(email=email, name=name)
-    newUser.set_password(password)
+    new_user = User(email=email, name=name)
+    new_user.set_password(password)
 
-    db.session.add(newUser)
+    db.session.add(new_user)
     db.session.commit()
 
     return redirect(url_for('auth.login'))

@@ -21,5 +21,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       });
     }
+
+    // delete notification
+    var $deleteButton = Array.prototype.slice.call(document.querySelectorAll('.notification > button.delete'), 0);
+
+    if ($deleteButton.length > 0) {
+  
+      // Add a click event on each of them
+      $deleteButton.forEach(function ($el) {
+        $el.addEventListener('click', function () {
+          $el.parentElement.classList.add('is-hidden');
+        });
+      });
+    }
   
   });

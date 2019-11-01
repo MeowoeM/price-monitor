@@ -2,72 +2,53 @@
 
 {% extends "base.html" %}
 
+{% block head %}
+  {{ super() }}
+  <script type=text/javascript src="{{ url_for('static', filename='js/selectTasks.js') }}"></script>
+{% endblock %}
+
 {% block content %}
-<section class="main-content columns is-fullheight">
-  <div class="column is-2 is-narrow-mobile is-fullheight is-hidden-mobile section has-background-light">	
-      <aside class="menu sticky">	
+<div class="columns is-fullheight">
+  <div class="column is-2 is-sidebar-menu is-hidden-mobile">	
+      <aside class="menu">	
         <ul class="menu-list has-text-left is-size-5">
-          <li><a>Add</a></li>
-          <li><a>Select</a></li>
+          <li><a id="add-button" href="{{ url_for('main.add_task') }}">Add</a></li>
+          <li><a id="select-button" onclick="enterSelectingMode()">Select</a></li>
+          <li><a id="display-button" class="is-hidden" onclick="displayMultipleTask()">Display</a></li>
+          <li><a id="cancel-button" class="is-hidden" onclick="exitSelectingMode()">Cancel</a></li>
         </ul>
       </aside>
-    </div>
   </div>
-  <div class="column is-light">
-      <p  class="menu-label"><b>Quick Links</b></p>
-      <ul id="menu" class="menu-list">
-        <li><a href="#basic">Basic SEO Checklist</a></li>
-        <li><a href="#keyword">Keyword Research Checklist</a></li>
-        <li><a href="#onpage">On-Page SEO Checklist</a></li>
-        <li><a href="#content">Content Checklist</a></li>
-        <li><a href="#technical">Technical SEO Checklist</a></li>
-        <li><a href="#link">Link Building Checklist</a></li>
-      </ul>
-      <p  class="menu-label"><b>Quick Links</b></p>
-      <ul id="menu" class="menu-list">
-        <li><a href="#basic">Basic SEO Checklist</a></li>
-        <li><a href="#keyword">Keyword Research Checklist</a></li>
-        <li><a href="#onpage">On-Page SEO Checklist</a></li>
-        <li><a href="#content">Content Checklist</a></li>
-        <li><a href="#technical">Technical SEO Checklist</a></li>
-        <li><a href="#link">Link Building Checklist</a></li>
-      </ul>
-      <p  class="menu-label"><b>Quick Links</b></p>
-      <ul id="menu" class="menu-list">
-        <li><a href="#basic">Basic SEO Checklist</a></li>
-        <li><a href="#keyword">Keyword Research Checklist</a></li>
-        <li><a href="#onpage">On-Page SEO Checklist</a></li>
-        <li><a href="#content">Content Checklist</a></li>
-        <li><a href="#technical">Technical SEO Checklist</a></li>
-        <li><a href="#link">Link Building Checklist</a></li>
-      </ul>
-      <p  class="menu-label"><b>Quick Links</b></p>
-      <ul id="menu" class="menu-list">
-        <li><a href="#basic">Basic SEO Checklist</a></li>
-        <li><a href="#keyword">Keyword Research Checklist</a></li>
-        <li><a href="#onpage">On-Page SEO Checklist</a></li>
-        <li><a href="#content">Content Checklist</a></li>
-        <li><a href="#technical">Technical SEO Checklist</a></li>
-        <li><a href="#link">Link Building Checklist</a></li>
-      </ul>
-      <p  class="menu-label"><b>Quick Links</b></p>
-      <ul id="menu" class="menu-list">
-        <li><a href="#basic">Basic SEO Checklist</a></li>
-        <li><a href="#keyword">Keyword Research Checklist</a></li>
-        <li><a href="#onpage">On-Page SEO Checklist</a></li>
-        <li><a href="#content">Content Checklist</a></li>
-        <li><a href="#technical">Technical SEO Checklist</a></li>
-        <li><a href="#link">Link Building Checklist</a></li>
-      </ul>
-      <p  class="menu-label"><b>Quick Links</b></p>
-      <ul id="menu" class="menu-list">
-        <li><a href="#basic">Basic SEO Checklist</a></li>
-        <li><a href="#keyword">Keyword Research Checklist</a></li>
-        <li><a href="#onpage">On-Page SEO Checklist</a></li>
-        <li><a href="#content">Content Checklist</a></li>
-        <li><a href="#technical">Technical SEO Checklist</a></li>
-        <li><a href="#link">Link Building Checklist</a></li>
+  <div class="column is-main-content">
+      {% with errors = get_flashed_messages() %}
+        {% if errors %}
+          <div class="notification is-warning">
+            <button class="delete"></button>
+            {{ errors[0] }}
+          </div>
+        {% endif %}
+      {% endwith %}
+      <p  class="menu-label"><b>Items under monitoring</b></p>
+      <ul id="task-list" class="menu-list">
+        {% for info in task_info %}
+        <li id="{{ info['task_id'] }}" class="task" onclick="return selectTask(this.id)">
+          <a href="{{ url_for('main.display_task', task_id=info['task_id']) }}">
+            <article class="media">
+                <div class="media-left">
+                  <figure class="image is-64x64">
+                    <img src="{{ info['image_url'] }}" alt="Image">
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <div class="content">
+                    <p>{{ info['name'] }}</p>
+                  </div>
+                </div>
+            </article>
+          </a>
+        </li>
+        {% endfor %}
       </ul>
   </div>
-</section>
+</div>
 {% endblock %}

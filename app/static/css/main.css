@@ -1,3 +1,27 @@
-.sticky	{
-	position: fixed;
+.is-sidebar-menu {
+padding: 2.5rem;
+background: #4a4a4a;
 }
+.is-sidebar-menu li a {
+color: white;
+}
+
+.menu-list li.active a {
+	background: white;
+}
+
+.columns.is-fullheight {
+max-height: calc(100vh - ( 3.25rem - .75rem ) );
+height: calc(100vh - ( 3.25rem - .75rem ) );
+display: flex;
+flex-direction: row;
+justify-content: stretch;
+}
+.columns.is-fullheight .column {
+overflow-y: auto;
+}
+
+.is-main-content {
+background: #dbdbdb;
+}
+  

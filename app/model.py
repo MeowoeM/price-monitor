@@ -17,17 +17,10 @@ class User(db.Model, UserMixin):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
-        return check_password_hash(self.passwordHash, password)
+        return check_password_hash(self.password_hash, password)
 
-    def subscribe(self, task, time=datetime.utcnow):
+    def subscribe(self, task, time=datetime.now()):
         self.subscribes.append(Subscribe(user=self, task=task, subscribe_time=time))
-
-    def unsubscribe(self, task_id):
-        for task in self.subscribes:
-            if task.id == task_id:
-                self.subscribes.remove(task)
-                return True
-        return False
 
     def __repr__(self):
         return '<User {} [{}]>'.format(self.name, self.id)
@@ -35,18 +28,21 @@ class User(db.Model, UserMixin):
 # monitoring task
 class Task(db.Model):
     __tablename__ = 'tasks'
+    __table_args__ = (db.UniqueConstraint('url', 'operation', name='_url_operation'), )
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.Text)
     image_url = db.Column(db.String(2048))
 
-    url = db.Column(db.String(2048), index=True, unique=True)
-    created_time = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    url = db.Column(db.String(2048), index=True)
+    operation = db.Column(db.String(4096), index=True)
+
+    created_time = db.Column(db.DateTime, index=True, default=datetime.now())
     expiring_time = db.Column(db.DateTime, index=True)
     interval = db.Column(db.Integer, index=True) # frequency, in minutes
 
-    prices = db.relationship("Price", secondary="price_lookup")
+    prices = db.relationship("Price", secondary="price_lookup", backref=db.backref('tasks'))
     subscribers = db.relationship("User", secondary="subscribes")
 
     def __repr__(self):
@@ -57,7 +53,7 @@ class Price(db.Model):
     __tablename__ ='prices'
 
     id = db.Column(db.Integer, primary_key=True)
-    time = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    time = db.Column(db.DateTime, index=True, default=datetime.now())
     price = db.Column(db.Numeric(10, 2), index=True)
 
 
@@ -66,7 +62,7 @@ class Subscribe(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), primary_key=True)
-    subscribe_time = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    subscribe_time = db.Column(db.DateTime, index=True, default=datetime.now())
 
     user = db.relationship("User", backref=db.backref("subscribes", cascade="all, delete-orphan" ))
     task = db.relationship("Task", backref=db.backref("subscribes", cascade="all, delete-orphan" ))
