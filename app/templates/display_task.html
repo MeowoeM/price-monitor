@@ -1,0 +1,64 @@
+<!-- templates/profile.html -->
+
+{% extends "base.html" %}
+
+{% block head %}
+  {{ super() }}
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="columns is-fullheight">
+  <div class="column is-2 is-sidebar-menu is-hidden-mobile">	
+      <aside class="menu">	
+        <ul class="menu-list has-text-left is-size-5">
+          <li><a id="back" href="{{ url_for('main.profile') }}">Back</a></li>
+        </ul>
+      </aside>
+  </div>
+  <div class="column is-main-content">
+        {% with errors = get_flashed_messages() %}
+        {% if errors %}
+            <div class="notification is-danger">
+                {{ errors[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+    
+    <h1 class="title is-1">{{ name }}</h1>
+    <div class="chart" id="price_plot">
+        <script>
+            var graph = {{ plot | safe }};
+            Plotly.plot('price_plot', graph.data, graph.layout);
+        </script>
+    </div>
+    <h3 class="title is-3">Info:</h3>
+    <table class="table is-fullwidth">
+        <tr>
+            <td>Created time:</td>
+            <td>{{ created_time }}</td>
+        </tr>
+        <tr>
+            <td>Expiring time:</td>
+            <td>{{ expiring_time }}</td>
+        </tr>
+        <tr>
+            <td>Url:</td>
+            <td>{{ url }}</td>
+        </tr>
+        <tr>
+            <td>Description:</td>
+            <td>{{ description }}</td>
+        </tr>
+    </table>
+    <h3 class="title is-3">Image:</h3>
+    <figure class="image is-square">
+        <img src="{{ image_url }}">
+    </figure>
+    <form method="POST" action="{{ url_for('main.delete_task_post', task_id=task_id) }}">
+        <button class="button is-block is-danger is-large is-fullwidth">Delete</button>       
+    </form>
+    </div>
+</div>
+{% endblock %}

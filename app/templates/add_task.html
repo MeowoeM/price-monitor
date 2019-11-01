@@ -1,0 +1,63 @@
+<!-- templates/profile.html -->
+
+{% extends "base.html" %}
+
+{% block head %}
+  {{ super() }}
+  <script type=text/javascript src="{{ url_for('static', filename='js/add_task.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="columns is-fullheight">
+  <div class="column is-2 is-sidebar-menu is-hidden-mobile">	
+      <aside class="menu">	
+        <ul class="menu-list has-text-left is-size-5">
+          <li><a id="back" href="{{ url_for('main.profile') }}">Back</a></li>
+        </ul>
+      </aside>
+  </div>
+  <div class="column is-main-content">
+    <div class="box">
+        {% with errors = get_flashed_messages() %}
+        {% if errors %}
+            <div class="notification is-danger">
+                {{ errors[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+    <form method="POST" action="/add_task">
+        <div class="field">
+            <div class="control">
+                <input class="input is-large" name="url" placeholder="Url" autofocus>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <input class="input is-large" name="operation" value="custom:span/id/priceblock_dealprice,span/id/priceblock_ourprice">
+            </div>
+        </div>
+        <button class="button is-block is-black is-large is-fullwidth" id="preview">Preview metadata</button>
+        <div class="field">
+            <div class="control">
+                <input class="input is-large" name="name" placeholder="Name">
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <input class="input is-large" name="description" placeholder="Description">
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <input class="input is-large" name="image_url" id="image_url" placeholder="Image Url">
+            </div>
+        </div>
+        <figure class="image">
+            <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image" id="image">
+        </figure>
+        <button class="button is-block is-black is-large is-fullwidth">Add</button>
+    </form>
+</div>        
+  </div>
+</div>
+{% endblock %}
